@@ -41,7 +41,7 @@ int main(int, char**)
     // TODO: iterate the sensors list and print the sensor name
     printf( "SENSORS: \n" );
     for(int i=0; i < sensors.size(); i++) {
-        printf("%s", sensors[i]->name());
+        printf("%s", sensors[i]->name().c_str());
     }
 
     // initialize WiringPi
