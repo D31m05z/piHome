@@ -10,4 +10,4 @@ public:
     ~Sensor() {}
 
     virtual void update() = 0;
-}
+};

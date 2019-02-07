@@ -1,10 +1,11 @@
 #include "dht11.h"
+#include <cstring>  // memset
 
 DHT11Sensor::DHT11Sensor(int DHT_PIN)
     : DHT_PIN_(DHT_PIN)
     , MAX_TIMINGS_(85)
 {
-    memset(data_, 0, sizeof(data));
+    memset(data_, 0, sizeof(data_));
 }
 
 DHT11Sensor::~DHT11Sensor()

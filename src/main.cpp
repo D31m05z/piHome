@@ -70,7 +70,7 @@ int main(int, char**)
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
-        glClearColor(color.x, color.y, color.z, color.w);
+        glClearColor(0.7f, 0.7f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui::Render();
         glfwSwapBuffers(window);

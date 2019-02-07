@@ -13,4 +13,4 @@ private:
     int DHT_PIN_;
     int MAX_TIMINGS_;
     int data_[5];
-}
+};
