@@ -7,6 +7,7 @@
 #include <wiringPi.h>
 #include <thread>
 #include <atomic>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -29,14 +30,15 @@ void sensor_thread_func(const std::vector<Sensor*> sensors)
             sensors[i]->update();
         }
 
-        delay( 1000 ); /* wait 1 second before next read */
+        usleep(100000); // 10fps
+        //delay( 1000 ); /* wait 1 second before next read */
     }
 }
 
 int main(int, char**)
 {
     printf( "piHome initializing ...\n" );
- 
+
     // initialize wiringPiSetupGpio
     if ( wiringPiSetupGpio() == -1 ) {
         printf( "[E] wiringPiSetupGpio failed\n" );
@@ -44,10 +46,10 @@ int main(int, char**)
     }
 
     // initialize sensors
-	// TODO: move to member
+    // TODO: move to member
     std::vector<Sensor*> sensors;
-    sensors.push_back(new DHT11Sensor("Raspberry Pi DHT11/DHT22 temperature/humidity", 4, 85));
-	sensors.push_back(new MQ135Sensor("Raspberry Pi MQ-135 Gas sensor", 19));
+    //sensors.push_back(new DHT11Sensor("Raspberry Pi DHT11/DHT22 temperature/humidity", 4, 85));
+    //sensors.push_back(new MQ135Sensor("Raspberry Pi MQ-135 Gas sensor", 19));
     sensors.push_back(new PIRSensor("Raspberry Pi PIR Motion decetor sensor", 20));
 
     printf( "SENSORS: \n" );

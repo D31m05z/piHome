@@ -24,8 +24,8 @@ void DHT11Sensor::update()
     uint8_t counter     = 0;
     uint8_t j           = 0, i;
 
-    memset(data_, 0, sizeof(data_));
-    //data_[0] = data_[1] = data_[2] = data_[3] = data_[4] = 0;
+    //memset(data_, 0, sizeof(data_));
+    data_[0] = data_[1] = data_[2] = data_[3] = data_[4] = 0;
 
     /* pull pin down for 18 milliseconds */
     pinMode( DHT_PIN_, OUTPUT );
