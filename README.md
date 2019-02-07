@@ -2,8 +2,8 @@ checkout
 --------
 
 ```
-git clone https://github.com/d31m05z/piSecurity.git
-cd piSecurity
+git clone https://github.com/d31m05z/piHome.git
+cd piHome
 git submodule update --init
 ```
 

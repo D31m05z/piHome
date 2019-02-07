@@ -16,19 +16,12 @@ static void error_callback(int error, const char* description)
 
 int main(int, char**)
 {
-    std::vector<int> PINS = { 0, 2, 3, 4 };
-
-    if(PINS.size() < 4) {
-        printf("You need to define 4 GPIO pin for softPWM.\n");
-        return 1;
-    }
-
     // Setup window
     glfwSetErrorCallback(error_callback);
     if (!glfwInit())
         return 1;
 
-    GLFWwindow* window = glfwCreateWindow(640, 480, "S3cur1ty Home", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(640, 480, "piHome", NULL, NULL);
     glfwMakeContextCurrent(window);
 
     // Setup ImGui binding
@@ -38,7 +31,7 @@ int main(int, char**)
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         ImGui_ImplGlfw_NewFrame();
-        ImGui::Begin("P1 S3cur1ty Home");
+        ImGui::Begin("piHome");
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::End();
 
