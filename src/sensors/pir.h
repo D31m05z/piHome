@@ -2,18 +2,18 @@
 
 #include "sensor.h"
 
-class MQ135Sensor : public Sensor
+class PIRSensor : public Sensor
 {
 public:
     // std::string name
-    // int GAS_PIN = 19   /* GPIO-19 */
-    MQ135Sensor(const std::string& name, int GAS_PIN);
-    ~MQ135Sensor();
+    // int PIR_PIN = 20   /* GPIO-20 */
+    PIRSensor(const std::string& name, int PIR_PIN);
+    ~PIRSensor();
 
     // update sensor, read data from sensor
     void update() override;
 
 private:
     // GPIO pin
-    int GAS_PIN_;
+    int PIR_PIN_;
 };

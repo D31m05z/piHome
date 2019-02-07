@@ -9,6 +9,7 @@ find_package(imgui REQUIRED)
 add_executable(${PROJECT_NAME}
     src/sensors/dht11.cpp
     src/sensors/mq135.cpp
+    src/sensors/pir.cpp
     src/main.cpp
 )
 

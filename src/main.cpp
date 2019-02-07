@@ -14,6 +14,7 @@
 
 #include "sensors/dht11.h"
 #include "sensors/mq135.h"
+#include "sensors/pir.h"
 
 static void error_callback(int error, const char* description)
 {
@@ -28,7 +29,7 @@ void sensor_thread_func(const std::vector<Sensor*> sensors)
             sensors[i]->update();
         }
 
-        delay( 2000 ); /* wait 2 seconds before next read */
+        delay( 1000 ); /* wait 1 second before next read */
     }
 }
 
@@ -47,6 +48,8 @@ int main(int, char**)
     std::vector<Sensor*> sensors;
     sensors.push_back(new DHT11Sensor("Raspberry Pi DHT11/DHT22 temperature/humidity", 4, 85));
 	sensors.push_back(new MQ135Sensor("Raspberry Pi MQ-135 Gas sensor", 19));
+    sensors.push_back(new PIRSensor("Raspberry Pi PIR Motion decetor sensor", 20));
+
     printf( "SENSORS: \n" );
     for(int i=0; i < sensors.size(); i++) {
         printf("%s", sensors[i]->name().c_str());
