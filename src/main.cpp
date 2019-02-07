@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "sensors/dht11.h"
+#include "sensors/mq135.h"
 
 static void error_callback(int error, const char* description)
 {
@@ -33,24 +34,23 @@ void sensor_thread_func(const std::vector<Sensor*> sensors)
 
 int main(int, char**)
 {
-    // TODO: move to member
-    std::vector<Sensor*> sensors;
-    sensors.push_back(new DHT11Sensor("Raspberry Pi DHT11/DHT22 temperature/humidity", 3, 85));
-
     printf( "piHome initializing ...\n" );
-    // TODO: iterate the sensors list and print the sensor name
-    printf( "SENSORS: \n" );
-    for(int i=0; i < sensors.size(); i++) {
-        printf("%s", sensors[i]->name().c_str());
-    }
-
-    // initialize WiringPi
-    if ( wiringPiSetup() == -1 ) {
-        printf( "[E] wiringPiSetup failed\n" );
+ 
+    // initialize wiringPiSetupGpio
+    if ( wiringPiSetupGpio() == -1 ) {
+        printf( "[E] wiringPiSetupGpio failed\n" );
         return 1;
     }
 
     // initialize sensors
+	// TODO: move to member
+    std::vector<Sensor*> sensors;
+    sensors.push_back(new DHT11Sensor("Raspberry Pi DHT11/DHT22 temperature/humidity", 4, 85));
+	sensors.push_back(new MQ135Sensor("Raspberry Pi MQ-135 Gas sensor", 19));
+    printf( "SENSORS: \n" );
+    for(int i=0; i < sensors.size(); i++) {
+        printf("%s", sensors[i]->name().c_str());
+    }
 
     // start sensors
     std::thread sensor_thread = std::thread{ sensor_thread_func, sensors };
