@@ -7,7 +7,7 @@
 #include <cstring>  // memset
 
 DHT11Sensor::DHT11Sensor(const std::string& name, int DHT_PIN, int MAX_TIMINGS)
-    : name_(name)
+    : Sensor(name)
     , DHT_PIN_(DHT_PIN)
     , MAX_TIMINGS_(MAX_TIMINGS)
 {

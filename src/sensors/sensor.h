@@ -3,7 +3,7 @@
 class Sensor
 {
 public:
-    Sensor() {}
+    Sensor(const std::string& name) : name_(name) {}
     ~Sensor() {}
 
     // update sensor
