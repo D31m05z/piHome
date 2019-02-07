@@ -1,9 +1,15 @@
 #include "dht11.h"
+
+#include <wiringPi.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 #include <cstring>  // memset
 
-DHT11Sensor::DHT11Sensor(int DHT_PIN)
-    : DHT_PIN_(DHT_PIN)
-    , MAX_TIMINGS_(85)
+DHT11Sensor::DHT11Sensor(const std::string& name, int DHT_PIN, int MAX_TIMINGS)
+    : name_(name)
+    , DHT_PIN_(DHT_PIN)
+    , MAX_TIMINGS_(MAX_TIMINGS)
 {
     memset(data_, 0, sizeof(data_));
 }

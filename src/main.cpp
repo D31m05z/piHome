@@ -4,6 +4,9 @@
 #include <imgui/imgui_glfw.h>
 #include <GLFW/glfw3.h>
 
+#include <wiringPi.h>
+#include <thread>
+#include <atomic>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -15,26 +18,49 @@ static void error_callback(int error, const char* description)
 {
     fprintf(stderr, "Error %d: %s\n", error, description);
 }
+std::atomic<bool> exiting(false);
+
+void sensor_thread_func(const std::vector<Sensor*> sensors)
+{
+    while(!exiting.load(std::memory_order_relaxed)) {
+        for(int i=0; i < sensors.size(); i++) {
+            sensors[i]->update();
+        }
+
+        delay( 2000 ); /* wait 2 seconds before next read */
+    }
+}
 
 int main(int, char**)
 {
+    // TODO: move to member
     std::vector<Sensor*> sensors;
-    sensors.push_back(new DHT11Sensor(3));
+    sensors.push_back(new DHT11Sensor("Raspberry Pi DHT11/DHT22 temperature/humidity", 3, 85));
 
     printf( "piHome initializing ...\n" );
     // TODO: iterate the sensors list and print the sensor name
     printf( "SENSORS: \n" );
-    printf( "         - Raspberry Pi DHT11/DHT22 temperature/humidity test\n" );
+    for(int i=0; i < sensors.size(); i++) {
+        printf("%s", sensors[i]->name());
+    }
 
+    // initialize WiringPi
     if ( wiringPiSetup() == -1 ) {
         printf( "[E] wiringPiSetup failed\n" );
-        exit( 1 );
+        return 1;
     }
+
+    // initialize sensors
+
+    // start sensors
+    std::thread sensor_thread = std::thread{ sensor_thread_func, sensors };
 
     // Setup window
     glfwSetErrorCallback(error_callback);
-    if (!glfwInit())
+    if (!glfwInit()) {
+        printf( "[E] glfwInit failed\n" );
         return 1;
+    }
 
     GLFWwindow* window = glfwCreateWindow(640, 480, "piHome", NULL, NULL);
     glfwMakeContextCurrent(window);
@@ -44,16 +70,6 @@ int main(int, char**)
 
     // Main loop
     while (!glfwWindowShouldClose(window)) {
-
-        // sensors
-        for(int i=0; i < sensors.size(); i++) {
-            sensors[i]->update();
-        }
-
-        // TODO: just for testing
-        //       separate it to an another thread
-        delay( 2000 ); /* wait 2 seconds before next read */
-
         // imgui
         glfwPollEvents();
         ImGui_ImplGlfw_NewFrame();
@@ -74,6 +90,12 @@ int main(int, char**)
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui::Render();
         glfwSwapBuffers(window);
+    }
+
+    exiting.store(true, std::memory_order_relaxed);
+
+    if(sensor_thread.joinable()) {
+        sensor_thread.join();
     }
 
     // Cleanup

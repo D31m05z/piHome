@@ -1,4 +1,4 @@
-project(aqualed)
+project(piHome)
 
 find_package(glfw3 REQUIRED)
 find_package(imgui REQUIRED)
