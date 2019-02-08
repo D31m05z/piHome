@@ -6,7 +6,10 @@ int main(int argc, char** argv)
     printf( "piHome initializing ...\n" );
 
     PIHome piHome;
-    piHome.execute();
+    while(piHome.isRunning()) {
+        piHome.update();
+        piHome.draw();
+    }
 
     return 0;
 }

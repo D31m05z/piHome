@@ -22,10 +22,15 @@
 class PIHome {
 public:
     PIHome();
-    void execute();
+    ~PIHome();
+
+    void update();
+    void draw();
+    bool isRunning();
 
 private:
-    std::atomic<bool> exiting_(false);
+    GLFWwindow* window_;
+    std::atomic<bool> exiting_;
     std::vector<Sensor*> sensors_;
     std::thread sensor_thread_;
 };
