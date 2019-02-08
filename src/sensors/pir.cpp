@@ -36,4 +36,6 @@ void PIRSensor::update()
         // no movements
         data_.detected = false;
     }
+
+    warning_ = data_.detected;
 }

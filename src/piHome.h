@@ -33,4 +33,5 @@ private:
     std::atomic<bool> exiting_;
     std::vector<Sensor*> sensors_;
     std::thread sensor_thread_;
+    int warnStep_;
 };

@@ -1,5 +1,8 @@
 #include "piHome.h"
 
+#define _USE_MATH_DEFINES
+#include <cmath>
+
 static void error_callback(int error, const char* description)
 {
     fprintf(stderr, "Error %d: %s\n", error, description);
@@ -7,6 +10,7 @@ static void error_callback(int error, const char* description)
 
 PIHome::PIHome()
     : exiting_(false)
+    , warnStep_(0)
 {
     printf( "piHome initializing ...\n" );
 
@@ -110,6 +114,15 @@ void PIHome::draw()
     ImGui::End();
 
     for(int i=0; i < sensors_.size(); i++) {
+        bool warning = sensors_[i]->getWarning();
+        if (warning) {
+            float red = (float)(sin((++warnStep_ * 25 * M_PI / 180.0) + 1.0) / 4.0 + 0.5);
+            ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(red, 0.0f, 0.0f, 0.8f));
+            ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(red, 0.0f, 0.0f, 0.8f));
+            ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(red, 0.0f, 0.0f, 0.8f));
+            ImGui::PushStyleColor(ImGuiCol_TitleBgCollapsed, ImVec4(red, 0.0f, 0.0f, 0.8f));
+        }
+
         ImGui::Begin(sensors_[i]->name().c_str());
 
         CameraSensor* camera = dynamic_cast<CameraSensor*>(sensors_[i]);
@@ -140,6 +153,13 @@ void PIHome::draw()
         }
 
         ImGui::End();
+
+        if (warning) {
+            ImGui::PopStyleColor();
+            ImGui::PopStyleColor();
+            ImGui::PopStyleColor();
+            ImGui::PopStyleColor();
+        }
     }
 
     // Rendering
