@@ -104,6 +104,10 @@ int main(int, char**)
     }
 
     // Cleanup
+    for(int i=0; i < sensors.size(); i++) {
+        delete sensors[i];
+    }
+
     ImGui_ImplGlfw_Shutdown();
     glfwTerminate();
 
