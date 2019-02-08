@@ -56,7 +56,7 @@ PIHome::PIHome()
     // initialize sensors
     //sensors_.push_back(new DHT11Sensor("Raspberry Pi DHT11/DHT22 temperature/humidity", 4, 85));
     //sensors_.push_back(new MQ135Sensor("Raspberry Pi MQ-135 Gas sensor", 19));
-    //sensors_.push_back(new PIRSensor("Raspberry Pi PIR Motion decetor sensor", 20));
+    sensors_.push_back(new PIRSensor("Raspberry Pi PIR Motion decetor sensor", 20));
     sensors_.push_back(new CameraSensor("Raspberry Pi Camera sensor"));
 
     printf( "SENSORS: \n" );
@@ -110,9 +110,10 @@ void PIHome::draw()
     ImGui::End();
 
     for(int i=0; i < sensors_.size(); i++) {
+        ImGui::Begin(sensors_[i]->name().c_str());
+
         CameraSensor* camera = dynamic_cast<CameraSensor*>(sensors_[i]);
         if(camera != nullptr) {
-            ImGui::Begin(camera->name().c_str());
             ImGui::Text("Image");
             if(ImGui::Button("Take picture")) {
                 camera->takePicture();
@@ -124,9 +125,21 @@ void PIHome::draw()
             ImGui::Image((void*)(uintptr_t)image.textureID,
                          ImVec2(320, 240),
                          ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128));
-
-            ImGui::End();
         }
+
+        PIRSensor* pir = dynamic_cast<PIRSensor*>(sensors_[i]);
+        if(pir != nullptr) {
+            PIRData data = pir->getData();
+            if(data.timeinfo != nullptr) {
+                ImGui::Text("Last detected local time and date: %s", asctime(data.timeinfo));
+            }
+            ImGui::Text("Detected counter %d", data.count);
+            if(data.detected) {
+                ImGui::Text("MOTION DETECTED");
+            }
+        }
+
+        ImGui::End();
     }
 
     // Rendering

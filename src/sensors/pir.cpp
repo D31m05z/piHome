@@ -3,11 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <time.h>
 #include "wiringPi.h"
-
-time_t rawtime;
-struct tm * timeinfo;
 
 PIRSensor::PIRSensor(const std::string& name, int PIR_PIN)
     : Sensor(name)
@@ -30,14 +26,14 @@ void PIRSensor::update()
     // read the value
     // 1 means no movement
     // 0 means that something is moving
-    static int counter = 0;
     int val = digitalRead(PIR_PIN_);
     if(val == 1) {
-        time ( &rawtime );
-        timeinfo = localtime ( &rawtime );
-        printf("Current local time and date: %s", asctime (timeinfo));
-        printf("Motion detected %d\n", ++counter);
+        time ( &rawtime_ );
+        data_.timeinfo = localtime ( &rawtime_ );
+        data_.count++;
+        data_.detected = true;
     } else {
         // no movements
+        data_.detected = false;
     }
 }
