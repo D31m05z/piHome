@@ -13,7 +13,11 @@ public:
     // update sensor, read data from sensor
     void update() override;
 
+    bool getDetected() const { return detected_; }
+
 private:
     // GPIO pin
     int GAS_PIN_;
+
+    bool detected_;
 };

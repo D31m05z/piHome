@@ -59,7 +59,7 @@ PIHome::PIHome()
 
     // initialize sensors
     //sensors_.push_back(new DHT11Sensor("Raspberry Pi DHT11/DHT22 temperature/humidity", 4, 85));
-    //sensors_.push_back(new MQ135Sensor("Raspberry Pi MQ-135 Gas sensor", 19));
+    sensors_.push_back(new MQ135Sensor("Raspberry Pi MQ-135 Gas sensor", 19));
     sensors_.push_back(new PIRSensor("Raspberry Pi PIR Motion decetor sensor", 20));
     sensors_.push_back(new CameraSensor("Raspberry Pi Camera sensor"));
 
@@ -125,6 +125,7 @@ void PIHome::draw()
 
         ImGui::Begin(sensors_[i]->name().c_str());
 
+        // TODO remove dynamic cast, use template data instead
         CameraSensor* camera = dynamic_cast<CameraSensor*>(sensors_[i]);
         if(camera != nullptr) {
             ImGui::Text("Image");
@@ -149,6 +150,15 @@ void PIHome::draw()
             ImGui::Text("Detected counter %d", data.count);
             if(data.detected) {
                 ImGui::Text("MOTION DETECTED");
+            }
+        }
+
+        MQ135Sensor* mq135 = dynamic_cast<MQ135Sensor*>(sensors_[i]);
+        if(mq135 != nullptr) {
+            if(mq135->getDetected()) {
+                ImGui::Text("GAS detected");
+            } else {
+                ImGui::Text("OK");
             }
         }
 

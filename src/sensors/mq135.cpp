@@ -2,8 +2,9 @@
 #include <wiringPi.h>
 
 MQ135Sensor::MQ135Sensor(const std::string& name, int GAS_PIN)
-	: Sensor(name)
-	, GAS_PIN_(GAS_PIN)
+    : Sensor(name)
+    , GAS_PIN_(GAS_PIN)
+    , detected_(false)
 {
    pinMode(GAS_PIN_, INPUT);
 }
@@ -15,8 +16,10 @@ MQ135Sensor::~MQ135Sensor()
 void MQ135Sensor::update()
 {
     if(digitalRead(GAS_PIN_) == LOW) {
-        printf("GAS detected\n");
+        detected_ = true;
     } else {
-        printf("OK\n");
+        detected_ = false;
     }
+
+    warning_ = detected_;
 }
