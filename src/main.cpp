@@ -93,12 +93,15 @@ int main(int, char**)
             if(camera != nullptr) {
                 ImGui::Begin(camera->name().c_str());
                 ImGui::Text("Image");
+                if(ImGui::Button("Take picture")) {
+                    camera->takePicture();
+                }
 
                 RaspiImage image = camera->getImage();
                 glBindTexture(GL_TEXTURE_2D, image.textureID);
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width, image.height, 0, GL_RGB, GL_UNSIGNED_BYTE, image.data.data());
                 ImGui::Image((void*)(uintptr_t)image.textureID,
-                             ImVec2(image.width, image.height),
+                             ImVec2(320, 240),
                              ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128));
 
                 ImGui::End();
