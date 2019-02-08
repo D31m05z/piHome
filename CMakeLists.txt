@@ -12,6 +12,7 @@ add_executable(${PROJECT_NAME}
     src/sensors/mq135.cpp
     src/sensors/pir.cpp
     src/sensors/camera.cpp
+    src/piHome.cpp
     src/main.cpp
 )
 
