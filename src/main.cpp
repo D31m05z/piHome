@@ -53,7 +53,33 @@ int main(int, char**)
         return 1;
     }
 
-    GLFWwindow* window = glfwCreateWindow(640, 480, "piHome", NULL, NULL);
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    if (monitor == nullptr) {
+        throw std::runtime_error("Could not get primary monitor. This is probably caused by using RDP.");
+    }
+
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+    if (mode == nullptr) {
+        throw std::runtime_error("Could not get video mode. This is probably caused by using RDP.");
+    }
+
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+#ifdef GLFW_CONTEXT_CREATION_API
+    glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+#endif
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+    glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+    glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+    glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+    glfwWindowHint(GLFW_ALPHA_BITS, 0);
+    glfwWindowHint(GLFW_DECORATED, true);
+
+    GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "piHome", monitor, nullptr);
+    if (window == nullptr) {
+        throw std::runtime_error("Could not create GLFW window.");
+    }
     glfwMakeContextCurrent(window);
 
     // Setup ImGui binding
@@ -65,7 +91,8 @@ int main(int, char**)
     //sensors.push_back(new DHT11Sensor("Raspberry Pi DHT11/DHT22 temperature/humidity", 4, 85));
     //sensors.push_back(new MQ135Sensor("Raspberry Pi MQ-135 Gas sensor", 19));
     //sensors.push_back(new PIRSensor("Raspberry Pi PIR Motion decetor sensor", 20));
-    sensors.push_back(new CameraSensor("Raspberry Pi Camera sensor"));
+    //sensors.push_back(new CameraSensor("Raspberry Pi Camera sensor"));
+
     printf( "SENSORS: \n" );
     for(int i=0; i < sensors.size(); i++) {
         printf("%s\n", sensors[i]->name().c_str());
@@ -75,16 +102,14 @@ int main(int, char**)
     std::thread sensor_thread = std::thread{ sensor_thread_func, sensors };
 
     // Main loop
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window) && !exiting.load(std::memory_order_relaxed)) {
         // imgui
         glfwPollEvents();
         ImGui_ImplGlfw_NewFrame();
         ImGui::Begin("piHome");
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-        ImGui::End();
-
-        ImGui::Begin("profile");
-        if(ImGui::Button("zero")) {
+        if(ImGui::Button("Exit")) {
+            exiting.store(true, std::memory_order_relaxed);
         }
         ImGui::End();
 
