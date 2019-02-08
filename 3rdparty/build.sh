@@ -8,3 +8,6 @@ cmake --build build/glfw --target install
 
 cmake -DCMAKE_INSTALL_PREFIX=install -DGLFW_USE_EGL=true -DGLFW_CLIENT_LIBRARY="glesv2" -Himgui -Bbuild/imgui
 cmake --build build/imgui --target install
+
+cmake -DCMAKE_INSTALL_PREFIX=install -Hraspicam -Bbuild/raspicam
+cmake --build build/raspicam --target install
