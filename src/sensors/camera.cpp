@@ -26,13 +26,6 @@ CameraSensor::CameraSensor(const std::string& name)
     image_.height = camera_.getHeight();
     image_.data.resize(camera_.getImageTypeSize(raspicam::RASPICAM_FORMAT_RGB));
     std::cout << "width = " << image_.width << " height = " << image_.height << std::endl;
-
-    // Give the image data to OpenGL
-    glGenTextures(1, &image_.textureID);
-    glBindTexture(GL_TEXTURE_2D, image_.textureID);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_.width, image_.height, 0, GL_RGB, GL_UNSIGNED_BYTE, image_.data.data());
 }
 
 CameraSensor::~CameraSensor()

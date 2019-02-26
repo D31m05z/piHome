@@ -69,7 +69,13 @@ PIHome::PIHome()
     }
 
     // start sensors
-    //sensor_thread_ = std::thread (&PIHome::sensor_thread_func, PIHome());
+    sensor_thread_ = std::thread (&PIHome::sensor_thread_func, PIHome());
+
+    // Give the image data to OpenGL
+    glGenTextures(1, &textureID_);
+    glBindTexture(GL_TEXTURE_2D, textureID_);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
 PIHome::~PIHome()
@@ -85,6 +91,8 @@ PIHome::~PIHome()
         delete sensors_[i];
     }
 
+    glDeleteTextures(1, &textureID_);
+
     ImGui_ImplGlfw_Shutdown();
     glfwTerminate();
 }
@@ -96,7 +104,7 @@ void PIHome::update()
         sensors_[i]->update();
     }
 
-    usleep(100000); // 10fps
+    // usleep(100000); // 10fps
     //delay( 1000 ); /* wait 1 second before next read */
 }
 
@@ -134,9 +142,12 @@ void PIHome::draw()
             }
 
             RaspiImage image = camera->getImage();
-            glBindTexture(GL_TEXTURE_2D, image.textureID);
+
+            glBindTexture(GL_TEXTURE_2D, textureID_);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width, image.height, 0, GL_RGB, GL_UNSIGNED_BYTE, image.data.data());
-            ImGui::Image((void*)(uintptr_t)image.textureID,
+            ImGui::Image((void*)(uintptr_t)textureID_,
                          ImVec2(320, 240),
                          ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128));
         }

@@ -34,4 +34,5 @@ private:
     std::vector<Sensor*> sensors_;
     std::thread sensor_thread_;
     int warnStep_;
+    GLuint textureID_;
 };
