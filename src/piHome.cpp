@@ -69,7 +69,7 @@ PIHome::PIHome()
     }
 
     // start sensors
-    sensor_thread_ = std::thread (&PIHome::sensor_thread_func, PIHome());
+    sensor_thread_ = std::thread(&PIHome::update, this);
 
     // Give the image data to OpenGL
     glGenTextures(1, &textureID_);

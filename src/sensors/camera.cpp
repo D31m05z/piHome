@@ -30,7 +30,6 @@ CameraSensor::CameraSensor(const std::string& name)
 
 CameraSensor::~CameraSensor()
 {
-    glDeleteTextures(1, &image_.textureID);
 }
 
 void CameraSensor::update()
