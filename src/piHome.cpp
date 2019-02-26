@@ -100,12 +100,14 @@ PIHome::~PIHome()
 // update loop
 void PIHome::update()
 {
-    for(int i = 0; i < sensors_.size(); i++) {
-        sensors_[i]->update();
-    }
+    while(!exiting_.load()) {
+        for(int i = 0; i < sensors_.size(); i++) {
+            sensors_[i]->update();
+        }
 
-    // usleep(100000); // 10fps
-    //delay( 1000 ); /* wait 1 second before next read */
+        // usleep(100000); // 10fps
+        //delay( 1000 ); /* wait 1 second before next read */
+    }
 }
 
 // draw loop
