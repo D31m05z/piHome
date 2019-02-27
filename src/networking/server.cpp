@@ -1,16 +1,82 @@
-#include<stdio.h>
-#include<string.h>
-#include<sys/socket.h>
-#include<arpa/inet.h>
-#include<unistd.h>
-#include<iostream>
-#include<fstream>
-#include<errno.h>
+#include "server.h"
+
+#include <stdio.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <iostream>
+#include <fstream>
+#include <errno.h>
 
 using namespace std;
 
-int send_image(int socket) {
+Server::Server()
+    : socket_desc_(-1)
+    , new_socket_(-1)
+{
 
+}
+
+Server::~Server()
+{
+    close(socket_desc_);
+    fflush(stdout);
+}
+
+int Server::createSocket()
+{
+    //Create socket
+    socket_desc_ = socket(AF_INET, SOCK_STREAM, 0);
+    if (socket_desc_ == -1) {
+        printf("Could not create socket");
+    }
+
+    //Prepare the sockaddr_in structure
+    server_.sin_family = AF_INET;
+    server_.sin_addr.s_addr = INADDR_ANY;
+    server_.sin_port = htons(8889);
+
+    //Bind
+    if (bind(socket_desc_, (struct sockaddr *) &server_, sizeof(server_)) < 0) {
+        puts("bind failed");
+        return 1;
+    }
+
+    puts("bind done");
+
+    //Listen
+    listen(socket_desc_, 3);
+
+    return 0;
+}
+
+int Server::waitIncomingConnection()
+{
+    //Accept and incoming connection
+    puts("Waiting for incoming connections...");
+    int c = sizeof(struct sockaddr_in);
+
+    if ((new_socket_ = accept(socket_desc_, (struct sockaddr *) &client_, (socklen_t *) &c))) {
+        puts("Connection accepted");
+    }
+
+    fflush(stdout);
+
+    if (new_socket_ < 0) {
+        perror("Accept Failed");
+        return 1;
+    }
+
+    // for test
+    if(sendImage(new_socket_) !=0) {
+        return 1;
+    }
+
+    return 0;
+}
+
+int Server::sendImage(int socket) {
     FILE *picture;
     int size, read_size, stat, packet_index;
     char send_buffer[10240], read_buffer[256];
@@ -41,7 +107,7 @@ int send_image(int socket) {
     } while (stat < 0);
 
     printf("Received data in socket\n");
-    printf("Socket data: %c\n", read_buffer);
+    printf("Socket data: %s\n", read_buffer);
 
     while (!feof(picture)) {
         //while(packet_index = 1){
@@ -58,59 +124,21 @@ int send_image(int socket) {
         printf(" \n");
         printf(" \n");
 
-
         packet_index++;
 
         //Zero out our send buffer
         bzero(send_buffer, sizeof(send_buffer));
     }
+
+    return 0;
 }
 
-int main(int argc, char *argv[]) {
-    int socket_desc, new_socket, c, read_size, buffer = 0;
-    struct sockaddr_in server, client;
-    char *readin;
-
-    //Create socket
-    socket_desc = socket(AF_INET, SOCK_STREAM, 0);
-    if (socket_desc == -1) {
-        printf("Could not create socket");
-    }
-
-    //Prepare the sockaddr_in structure
-    server.sin_family = AF_INET;
-    server.sin_addr.s_addr = INADDR_ANY;
-    server.sin_port = htons(8889);
-
-    //Bind
-    if (bind(socket_desc, (struct sockaddr *) &server, sizeof(server)) < 0) {
-        puts("bind failed");
+int main() {
+    Server server;
+    if(server.createSocket() != 0) {
         return 1;
     }
+    server.waitIncomingConnection();
 
-    puts("bind done");
-
-    //Listen
-    listen(socket_desc, 3);
-
-    //Accept and incoming connection
-    puts("Waiting for incoming connections...");
-    c = sizeof(struct sockaddr_in);
-
-    if ((new_socket = accept(socket_desc, (struct sockaddr *) &client, (socklen_t *) &c))) {
-        puts("Connection accepted");
-    }
-
-    fflush(stdout);
-
-    if (new_socket < 0) {
-        perror("Accept Failed");
-        return 1;
-    }
-
-    send_image(new_socket);
-
-    close(socket_desc);
-    fflush(stdout);
     return 0;
 }

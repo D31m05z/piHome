@@ -1,20 +1,60 @@
-#include<stdio.h>
-#include<string.h>
-#include<sys/socket.h>
-#include<arpa/inet.h>
-#include<sys/ioctl.h>
-#include<unistd.h>
-#include<iostream>
-#include<fstream>
-#include<errno.h>
+
+#include "client.h"
+
+#include <stdio.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+#include <iostream>
+#include <fstream>
+#include <errno.h>
 
 using namespace std;
 
+Client::Client()
+    : socket_desc_(-1)
+{
+
+}
+
+Client::~Client()
+{
+    close(socket_desc_);
+}
+
+int Client::createSocket()
+{
+    //Create socket
+    socket_desc_ = socket(AF_INET, SOCK_STREAM, 0);
+
+    if (socket_desc_ == -1) {
+        printf("Could not create socket");
+    }
+
+    memset(&server_, 0, sizeof(server_));
+    server_.sin_addr.s_addr = inet_addr("10.1.12.75");
+    server_.sin_family = AF_INET;
+    server_.sin_port = htons(8889);
+
+    //Connect to remote server
+    if (connect(socket_desc_, (struct sockaddr *) &server_, sizeof(server_)) < 0) {
+        cout << strerror(errno);
+        close(socket_desc_);
+        puts("Connect Error");
+        return 1;
+    }
+
+    puts("Connected\n");
+
+    return socket_desc_;
+}
+
 //This function is to be used once we have confirmed that an image is to be sent
 //It should read and output an image file
-
-int receive_image(int socket) { // Start function
-
+int Client::receiveImage(int socket)
+{
     int buffersize = 0, recv_size = 0, size = 0, read_size, write_size, packet_index = 1, stat;
 
     char imagearray[10241], verify = '1';
@@ -104,38 +144,11 @@ int receive_image(int socket) { // Start function
     return 1;
 }
 
-int main(int argc, char *argv[]) {
-
-    int socket_desc;
-    struct sockaddr_in server;
-    char *parray;
-
-
-    //Create socket
-    socket_desc = socket(AF_INET, SOCK_STREAM, 0);
-
-    if (socket_desc == -1) {
-        printf("Could not create socket");
-    }
-
-    memset(&server, 0, sizeof(server));
-    server.sin_addr.s_addr = inet_addr("10.1.12.75");
-    server.sin_family = AF_INET;
-    server.sin_port = htons(8889);
-
-    //Connect to remote server
-    if (connect(socket_desc, (struct sockaddr *) &server, sizeof(server)) < 0) {
-        cout << strerror(errno);
-        close(socket_desc);
-        puts("Connect Error");
-        return 1;
-    }
-
-    puts("Connected\n");
-
-    receive_image(socket_desc);
-
-    close(socket_desc);
+int main(int argc, char *argv[])
+{
+    Client client;
+    int socket_desc = client.createSocket();
+    client.receiveImage(socket_desc);
 
     return 0;
 }
