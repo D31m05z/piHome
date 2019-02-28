@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -ex
 
 cmake -DCMAKE_INSTALL_PREFIX=install -Hglm -Bbuild/glm
 cmake --build build/glm --target install
