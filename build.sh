@@ -1,6 +1,7 @@
 #!/bin/bash
 
-if [ ! -z USE_CROSS_COMPILE ]
+if [[ "$USE_CROSS_COMPILE" == true ]];
+then
     export PATH=$PATH:$HOME/raspberrypi/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
 
     # configure
