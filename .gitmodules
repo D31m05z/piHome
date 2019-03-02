@@ -7,3 +7,6 @@
 [submodule "3rdparty/raspicam"]
 	path = 3rdparty/raspicam
 	url = git@github.com:D31m05z/raspicam.git
+[submodule "3rdparty/imgui"]
+	path = 3rdparty/imgui
+	url = git@github.com:D31m05z/imgui
