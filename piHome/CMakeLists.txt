@@ -18,3 +18,5 @@ add_executable(${PROJECT_NAME}
 
 # TODO: raspicam use target install
 target_link_libraries(${PROJECT_NAME} glfw3 ::imgui wiringPi ${raspicam_LIBS})
+
+install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME} DESTINATION lib)
