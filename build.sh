@@ -4,8 +4,10 @@ export CMAKE_PREFIX_PATH=$PWD/3rdparty/install
 
 if [[ "$USE_CROSS_COMPILE" == true ]];
 then
-    export PATH=$PATH:$HOME/raspberrypi/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
-    export TOOLCHAIN_FILE=$HOME/raspberrypi/pi.cmake
+    [ ! -d raspberrypi ] && echo "Cross compile environment is not prepared. Run the setup-cross-compile.sh script first." && exit 1
+
+    export PATH=$PATH:$PWD/raspberrypi/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
+    export TOOLCHAIN_FILE=$PWD/toolchain/pi.cmake
 fi
 
 function build {
