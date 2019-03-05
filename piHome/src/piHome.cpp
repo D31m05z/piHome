@@ -41,7 +41,7 @@ PIHome::PIHome()
 #ifdef GLFW_CONTEXT_CREATION_API
     glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
 #endif
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
     glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
     glfwWindowHint(GLFW_RED_BITS, mode->redBits);
@@ -50,14 +50,32 @@ PIHome::PIHome()
     glfwWindowHint(GLFW_ALPHA_BITS, 0);
     glfwWindowHint(GLFW_DECORATED, true);
 
-    window_ = glfwCreateWindow(mode->width, mode->height, "piHome", monitor, nullptr);
+    const bool fullscreen = false;
+    if(fullscreen) {
+        window_ = glfwCreateWindow(mode->width, mode->height, "piHome", monitor, nullptr);
+    } else {
+        window_ = glfwCreateWindow(800, 480, "piHome", nullptr, nullptr);
+    }
+
     if (window_ == nullptr) {
         throw std::runtime_error("Could not create GLFW window.");
     }
     glfwMakeContextCurrent(window_);
 
-    // Setup ImGui binding
-    ImGui_ImplGlfw_Init(window_, true);
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+
+    // Setup Platform/Renderer bindings
+    ImGui_ImplGlfw_InitForOpenGL(window_, true);
+    ImGui_ImplOpenGL3_Init("#version 300 es");
 
     // initialize sensors
 #if HAVE_WIRING_PI
@@ -97,7 +115,10 @@ PIHome::~PIHome()
 
     glDeleteTextures(1, &textureID_);
 
+    ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+    glfwDestroyWindow(window_);
     glfwTerminate();
 }
 
@@ -117,9 +138,18 @@ void PIHome::update()
 // draw loop
 void PIHome::draw()
 {
-    // imgui
+    // Poll and handle events (inputs, window resize, etc.)
+    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+    // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+    // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+    // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
     glfwPollEvents();
+
+    // start imgui frame
+    ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
     ImGui::Begin("piHome");
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     if(ImGui::Button("Exit")) {
@@ -190,12 +220,16 @@ void PIHome::draw()
     }
 
     // Rendering
+    ImGui::Render();
     int display_w, display_h;
+    glfwMakeContextCurrent(window_);
     glfwGetFramebufferSize(window_, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
     glClearColor(0.7f, 0.7f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    ImGui::Render();
+
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    glfwMakeContextCurrent(window_);
     glfwSwapBuffers(window_);
 }
 

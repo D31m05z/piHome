@@ -1,8 +1,8 @@
 #pragma once
 
-#define GLFW_INCLUDE_ES2
 #include <imgui.h>
-#include <imgui/imgui_glfw.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 #include <GLFW/glfw3.h>
 
 #if HAVE_WIRING_PI
