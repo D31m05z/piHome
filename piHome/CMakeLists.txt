@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.7)
 
 project(piHome)
 
@@ -47,6 +47,8 @@ if(wiringPi_FOUND)
     target_link_libraries(${PROJECT_NAME} wiringPi)
     target_compile_definitions(${PROJECT_NAME} PRIVATE -DHAVE_WIRING_PI)
 endif()
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE -DGLFW_INCLUDE_ES2)
 
 # TODO: raspicam use target install
 target_link_libraries(${PROJECT_NAME} glfw3 ::imgui ${raspicam_LIBS})

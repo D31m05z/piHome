@@ -19,7 +19,8 @@ function build {
     PACKAGE=$(basename $1)
 
     cmake -DCMAKE_INSTALL_PREFIX=install -DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN_FILE -H$1 -Bbuild/$PACKAGE $2
-    cmake --build build/$PACKAGE --target install --parallel $PARALLEL
+    cmake --build build/$PACKAGE --target install
+    #--parallel $PARALLEL
 }
 
 # build dependencies
