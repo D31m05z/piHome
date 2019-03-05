@@ -1,33 +1,25 @@
 #pragma once
 
-#include "sensor.h"
-#include <raspicam/raspicam.h>
 #include <vector>
 #include <mutex>
 
-struct RaspiImage
+struct Image
 {
     int width = 0;
     int height = 0;
     std::vector<uint8_t> data;
 };
 
-class CameraSensor : public Sensor
+class Camera
 {
 public:
-    // std::string name
-    CameraSensor(const std::string& name);
-    ~CameraSensor();
+    Camera(size_t width, size_t height, size_t imageSize);
+    ~Camera();
 
-    // update camera sensor
-    void update() override;
-
-    RaspiImage getImage();
+    Image getImage();
     void takePicture();
 
-private:
-    // cmaera object
-    raspicam::RaspiCam camera_;
-    RaspiImage image_;
+protected:
+    Image image_;
     std::mutex mutex_;
 };

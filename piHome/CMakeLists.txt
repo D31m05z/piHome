@@ -11,8 +11,11 @@ find_package(wiringPi QUIET)
 
 add_executable(${PROJECT_NAME}
     src/sensors/camera.cpp
+    src/sensors/ipcamera.cpp
+    src/sensors/raspicamera.cpp
     src/piHome.cpp
-    src/main.cpp)
+    src/main.cpp
+)
 
 if(wiringPi_FOUND)
     target_sources(${PROJECT_NAME}

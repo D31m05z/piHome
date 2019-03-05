@@ -20,7 +20,8 @@
 #include "sensors/dht11.h"
 #include "sensors/mq135.h"
 #include "sensors/pir.h"
-#include "sensors/camera.h"
+#include "sensors/ipcamera.h"
+#include "sensors/raspicamera.h"
 
 class PIHome {
 public:

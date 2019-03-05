@@ -83,7 +83,8 @@ PIHome::PIHome()
     sensors_.push_back(new MQ135Sensor("Raspberry Pi MQ-135 Gas sensor", 19));
     sensors_.push_back(new PIRSensor("Raspberry Pi PIR Motion decetor sensor", 20));
 #endif
-    sensors_.push_back(new CameraSensor("Raspberry Pi Camera sensor"));
+    //sensors_.push_back(new RaspiCamera("Raspberry Pi Camera sensor", 1280, 720));
+    sensors_.push_back(new IPCamera("Rasberry Pi Camera sensor", 1280, 720));
 
     printf( "SENSORS: \n" );
     for(int i=0; i < sensors_.size(); i++) {
@@ -170,14 +171,14 @@ void PIHome::draw()
         ImGui::Begin(sensors_[i]->name().c_str());
 
         // TODO remove dynamic cast, use template data instead
-        CameraSensor* camera = dynamic_cast<CameraSensor*>(sensors_[i]);
+        Camera* camera = dynamic_cast<Camera*>(sensors_[i]);
         if(camera != nullptr) {
             ImGui::Text("Image");
             if(ImGui::Button("Take picture")) {
                 camera->takePicture();
             }
 
-            RaspiImage image = camera->getImage();
+            Image image = camera->getImage();
 
             glBindTexture(GL_TEXTURE_2D, textureID_);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

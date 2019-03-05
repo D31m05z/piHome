@@ -5,56 +5,31 @@
 #include <iostream>
 #include <unistd.h>
 
-CameraSensor::CameraSensor(const std::string& name)
-    : Sensor(name)
+Camera::Camera(size_t width, size_t height, size_t imageSize)
 {
-    //Open camera
-    std::cout << "Opening Camera..." << std::endl;
-    if (!camera_.open()) {
-        throw std::runtime_error("Error opening the camera sensor.");
-    }
-
-    //wait a while until camera stabilizes
-    std::cout << "Sleeping for 3 secs" << std::endl;
-    usleep(3*1000000);
-
-    //capture
-    camera_.grab();
-
     // allocate memory
-    image_.width = camera_.getWidth();
-    image_.height = camera_.getHeight();
-    image_.data.resize(camera_.getImageTypeSize(raspicam::RASPICAM_FORMAT_RGB));
+    image_.width = width;
+    image_.height = height;
+    image_.data.resize(imageSize);
     std::cout << "width = " << image_.width << " height = " << image_.height << std::endl;
 }
 
-CameraSensor::~CameraSensor()
+Camera::~Camera()
 {
 }
 
-void CameraSensor::update()
-{
-    //capture
-    camera_.grab();
-
-    std::lock_guard<std::mutex> guard(mutex_);
-
-    //extract the image in rgb format
-    camera_.retrieve(image_.data.data(), raspicam::RASPICAM_FORMAT_RGB); //get camera image
-}
-
-RaspiImage CameraSensor::getImage()
+Image Camera::getImage()
 {
     std::lock_guard<std::mutex> guard(mutex_);
     return image_;
 }
 
-void CameraSensor::takePicture()
+void Camera::takePicture()
 {
     static int counter = 0;
     std::string fileName = "image_" + std::to_string(++counter) + ".ppm";
     std::ofstream outFile(fileName, std::ios::binary);
-    outFile << "P6\n" << camera_.getWidth() << " " << camera_.getHeight() << " 255\n";
-    outFile.write((char*)image_.data.data(), camera_.getImageTypeSize(raspicam::RASPICAM_FORMAT_RGB));
+    outFile << "P6\n" << image_.width << " " << image_.height << " 255\n";
+    outFile.write((char*)image_.data.data(), image_.data.size());
     std::cout << "Image saved at " << fileName << std::endl;
 }
