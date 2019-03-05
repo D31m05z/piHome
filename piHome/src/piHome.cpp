@@ -14,10 +14,12 @@ PIHome::PIHome()
 {
     printf( "piHome initializing ...\n" );
 
+#if HAVE_WIRING_PI
     // initialize wiringPiSetupGpio
     if ( wiringPiSetupGpio() == -1 ) {
         throw std::runtime_error("[E] wiringPiSetupGpio failed");
     }
+#endif
 
     // Setup window
     glfwSetErrorCallback(error_callback);
@@ -58,9 +60,11 @@ PIHome::PIHome()
     ImGui_ImplGlfw_Init(window_, true);
 
     // initialize sensors
+#if HAVE_WIRING_PI
     //sensors_.push_back(new DHT11Sensor("Raspberry Pi DHT11/DHT22 temperature/humidity", 4, 85));
     sensors_.push_back(new MQ135Sensor("Raspberry Pi MQ-135 Gas sensor", 19));
     sensors_.push_back(new PIRSensor("Raspberry Pi PIR Motion decetor sensor", 20));
+#endif
     sensors_.push_back(new CameraSensor("Raspberry Pi Camera sensor"));
 
     printf( "SENSORS: \n" );
@@ -153,7 +157,7 @@ void PIHome::draw()
                          ImVec2(320, 240),
                          ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128));
         }
-
+#if HAVE_WIRING_PI
         PIRSensor* pir = dynamic_cast<PIRSensor*>(sensors_[i]);
         if(pir != nullptr) {
             PIRData data = pir->getData();
@@ -174,7 +178,7 @@ void PIHome::draw()
                 ImGui::Text("OK");
             }
         }
-
+#endif
         ImGui::End();
 
         if (warning) {

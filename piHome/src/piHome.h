@@ -5,7 +5,10 @@
 #include <imgui/imgui_glfw.h>
 #include <GLFW/glfw3.h>
 
+#if HAVE_WIRING_PI
 #include <wiringPi.h>
+#endif
+
 #include <thread>
 #include <atomic>
 #include <unistd.h>
