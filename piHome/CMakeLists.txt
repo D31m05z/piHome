@@ -13,6 +13,10 @@ add_executable(${PROJECT_NAME}
     src/sensors/camera.cpp
     src/sensors/ipcamera.cpp
     src/sensors/raspicamera.cpp
+
+    src/networks/server.cpp
+    src/networks/client.cpp
+
     src/piHome.cpp
     src/main.cpp
 

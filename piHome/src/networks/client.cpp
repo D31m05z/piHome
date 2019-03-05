@@ -1,5 +1,5 @@
 
-#include "client.h"
+#include "pihome/networks/client.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -145,6 +145,7 @@ int Client::receiveImage(int socket)
     return 1;
 }
 
+#if 0
 int main(int argc, char *argv[])
 {
     Client client;
@@ -153,3 +154,4 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+#endif

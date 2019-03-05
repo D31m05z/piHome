@@ -1,7 +1,8 @@
 #pragma once
 
-#include "sensor.h"
-#include "camera.h"
+#include "pihome/sensors/sensor.h"
+#include "pihome/sensors/camera.h"
+#include "pihome/networks/client.h"
 
 #include <vector>
 #include <mutex>
@@ -20,6 +21,8 @@ namespace pihome {
             void update() override;
 
         private:
+            networks::Client client_;
+            int socket_;
         };
 
     } // sensors

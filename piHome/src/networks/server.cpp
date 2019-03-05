@@ -1,4 +1,4 @@
-#include "server.h"
+#include "pihome/networks/server.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -134,6 +134,7 @@ int Server::sendImage(int socket) {
     return 0;
 }
 
+#if 0
 int main() {
     Server server;
     if(server.createSocket() != 0) {
@@ -143,3 +144,4 @@ int main() {
 
     return 0;
 }
+#endif
