@@ -5,7 +5,7 @@
 # the ia32-libs is not available on Debian, you can use lib32z1 instead
 
 # create rasberrypi folder to cross compile packages
-if [ -d raspberrypi ];
+if [ ! -d raspberrypi ];
 then
     mkdir raspberrypi
 
