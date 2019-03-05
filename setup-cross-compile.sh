@@ -17,14 +17,14 @@ then
 fi
 
 # create rootfs folder and copy the entire /lib and /usr directory from rasberrypi
-if [ ! -d rootfs ];
+if [ ! -d raspberrypi/rootfs ];
 then
-    read -s -p "Pi username: " username
-    read -s -p "Pi address: " address
+    read -p "Pi username: " username
+    read -p "Pi address: " address
 
     pushd raspberrypi
     mkdir rootfs
-    rsync -rl --delete-after --safe-links $username@$address:/{lib,usr} $PWD/raspberrypi/rootfs
+    rsync -rl --delete-after --safe-links $username@$address:/{lib,usr} $PWD/rootfs
     popd
 fi
 
