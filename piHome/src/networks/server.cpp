@@ -10,6 +10,7 @@
 #include <errno.h>
 
 using namespace std;
+using namespace pihome::networks;
 
 Server::Server()
     : socket_desc_(-1)

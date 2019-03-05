@@ -3,6 +3,8 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
+using namespace pihome::sensors;
+
 static void error_callback(int error, const char* description)
 {
     fprintf(stderr, "Error %d: %s\n", error, description);

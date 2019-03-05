@@ -1,6 +1,8 @@
 #include "mq135.h"
 #include <wiringPi.h>
 
+using namespace pihome::sensors;
+
 MQ135Sensor::MQ135Sensor(const std::string& name, int GAS_PIN)
     : Sensor(name)
     , GAS_PIN_(GAS_PIN)

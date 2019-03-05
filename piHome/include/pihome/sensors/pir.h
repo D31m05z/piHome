@@ -3,29 +3,35 @@
 #include "sensor.h"
 #include <time.h>
 
-struct PIRData
-{
-    struct tm * timeinfo = nullptr;
-    bool detected = false;
-    uint count = 0;
-};
+namespace pihome {
+    namespace sensors {
 
-class PIRSensor : public Sensor
-{
-public:
-    // std::string name
-    // int PIR_PIN = 20   /* GPIO-20 */
-    PIRSensor(const std::string& name, int PIR_PIN);
-    ~PIRSensor();
+        struct PIRData {
+            struct tm *timeinfo = nullptr;
+            bool detected = false;
+            uint count = 0;
+        };
 
-    // update sensor, read data from sensor
-    void update() override;
+        class PIRSensor : public Sensor {
+        public:
+            // std::string name
+            // int PIR_PIN = 20   /* GPIO-20 */
+            PIRSensor(const std::string &name, int PIR_PIN);
 
-    // TODO: is not thread safe
-    PIRData getData() { return data_; }
-private:
-    // GPIO pin
-    int PIR_PIN_;
-    time_t rawtime_;
-    PIRData data_;
-};
+            ~PIRSensor();
+
+            // update sensor, read data from sensor
+            void update() override;
+
+            // TODO: is not thread safe
+            PIRData getData() { return data_; }
+
+        private:
+            // GPIO pin
+            int PIR_PIN_;
+            time_t rawtime_;
+            PIRData data_;
+        };
+
+    } // sensors
+} // pihome

@@ -2,26 +2,30 @@
 
 #include <string>
 
-class Sensor
-{
-public:
-    Sensor(const std::string& name)
-        : name_(name)
-        , warning_(false)
-        {
-        }
-    ~Sensor() {}
+namespace pihome {
+    namespace sensors {
 
-    // update sensor
-    virtual void update() = 0;
+        class Sensor {
+        public:
+            Sensor(const std::string &name)
+                    : name_(name), warning_(false) {
+            }
 
-    // return the sensor name
-    std::string name() { return name_; }
+            ~Sensor() {}
 
-    bool getWarning() const { return warning_; }
+            // update sensor
+            virtual void update() = 0;
 
-protected:
-    // sensor name
-    std::string name_;
-    bool warning_;
-};
+            // return the sensor name
+            std::string name() { return name_; }
+
+            bool getWarning() const { return warning_; }
+
+        protected:
+            // sensor name
+            std::string name_;
+            bool warning_;
+        };
+
+    } // sensors
+} // pihome

@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include "wiringPi.h"
 
+using namespace pihome::sensors;
+
 PIRSensor::PIRSensor(const std::string& name, int PIR_PIN)
     : Sensor(name)
     , PIR_PIN_(PIR_PIN)

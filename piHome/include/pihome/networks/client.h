@@ -4,16 +4,23 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-class Client
-{
-public:
-    Client();
-    ~Client();
+namespace pihome {
+    namespace networks {
 
-    int createSocket();
-    int receiveImage(int socket);
+        class Client {
+        public:
+            Client();
 
-private:
-    int socket_desc_;
-    struct sockaddr_in server_;
-};
+            ~Client();
+
+            int createSocket();
+
+            int receiveImage(int socket);
+
+        private:
+            int socket_desc_;
+            struct sockaddr_in server_;
+        };
+
+    } // networks
+} // pihome

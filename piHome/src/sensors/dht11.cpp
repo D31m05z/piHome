@@ -6,6 +6,8 @@
 #include <stdint.h>
 #include <cstring>  // memset
 
+using namespace pihome::sensors;
+
 DHT11Sensor::DHT11Sensor(const std::string& name, int DHT_PIN, int MAX_TIMINGS)
     : Sensor(name)
     , DHT_PIN_(DHT_PIN)

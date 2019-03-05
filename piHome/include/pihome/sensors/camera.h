@@ -3,23 +3,29 @@
 #include <vector>
 #include <mutex>
 
-struct Image
-{
-    int width = 0;
-    int height = 0;
-    std::vector<uint8_t> data;
-};
+namespace pihome {
+    namespace sensors {
 
-class Camera
-{
-public:
-    Camera(size_t width, size_t height, size_t imageSize);
-    ~Camera();
+        struct Image {
+            int width = 0;
+            int height = 0;
+            std::vector<uint8_t> data;
+        };
 
-    Image getImage();
-    void takePicture();
+        class Camera {
+        public:
+            Camera(size_t width, size_t height, size_t imageSize);
 
-protected:
-    Image image_;
-    std::mutex mutex_;
-};
+            ~Camera();
+
+            Image getImage();
+
+            void takePicture();
+
+        protected:
+            Image image_;
+            std::mutex mutex_;
+        };
+
+    } // sensors
+} // pihome

@@ -8,17 +8,23 @@ namespace raspicam {
     class RaspiCam;
 }
 
-class RaspiCamera : public Sensor, public Camera
-{
-public:
-    // std::string name
-    RaspiCamera(const std::string& name, size_t width, size_t height);
-    ~RaspiCamera();
+namespace pihome {
+    namespace sensors {
 
-    // update camera sensor
-    void update() override;
+        class RaspiCamera : public Sensor, public Camera {
+        public:
+            // std::string name
+            RaspiCamera(const std::string &name, size_t width, size_t height);
 
-private:
-    // cmaera object
-    std::unique_ptr<raspicam::RaspiCam> camera_;
-};
+            ~RaspiCamera();
+
+            // update camera sensor
+            void update() override;
+
+        private:
+            // cmaera object
+            std::unique_ptr<raspicam::RaspiCam> camera_;
+        };
+
+    } // sensors
+} // pihome

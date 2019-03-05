@@ -5,6 +5,8 @@
 #include <iostream>
 #include <unistd.h>
 
+using namespace pihome::sensors;
+
 Camera::Camera(size_t width, size_t height, size_t imageSize)
 {
     // allocate memory

@@ -5,6 +5,8 @@
 #include <iostream>
 #include <unistd.h>
 
+using namespace pihome::sensors;
+
 IPCamera::IPCamera(const std::string& name, size_t width, size_t height)
     : Sensor(name)
     , Camera(width, height, width * height * 3) // TODO: w*h*c channel = 3 (RGB)

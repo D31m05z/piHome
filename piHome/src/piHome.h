@@ -35,7 +35,7 @@ public:
 private:
     GLFWwindow* window_;
     std::atomic<bool> exiting_;
-    std::vector<Sensor*> sensors_;
+    std::vector<pihome::sensors::Sensor*> sensors_;
     std::thread sensor_thread_;
     int warnStep_;
     GLuint textureID_;
