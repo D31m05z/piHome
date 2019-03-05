@@ -29,21 +29,21 @@ int Server::createSocket()
     //Create socket
     socket_desc_ = socket(AF_INET, SOCK_STREAM, 0);
     if (socket_desc_ == -1) {
-        printf("Could not create socket");
+        printf("Could not create socket\n");
     }
 
     //Prepare the sockaddr_in structure
     server_.sin_family = AF_INET;
     server_.sin_addr.s_addr = INADDR_ANY;
-    server_.sin_port = htons(8889);
+    server_.sin_port = htons(8888);
 
     //Bind
     if (bind(socket_desc_, (struct sockaddr *) &server_, sizeof(server_)) < 0) {
-        puts("bind failed");
+        printf("bind failed\n");
         return 1;
     }
 
-    puts("bind done");
+    printf("bind done\n");
 
     //Listen
     listen(socket_desc_, 3);
@@ -54,17 +54,17 @@ int Server::createSocket()
 int Server::waitIncomingConnection()
 {
     //Accept and incoming connection
-    puts("Waiting for incoming connections...");
+    printf("Waiting for incoming connections...\n");
     int c = sizeof(struct sockaddr_in);
 
     if ((new_socket_ = accept(socket_desc_, (struct sockaddr *) &client_, (socklen_t *) &c))) {
-        puts("Connection accepted");
+        printf("Connection accepted\n");
     }
 
     fflush(stdout);
 
     if (new_socket_ < 0) {
-        perror("Accept Failed");
+        printf("Accept Failed\n");
         return 1;
     }
 
