@@ -1,4 +1,4 @@
-#include "camera.h"
+#include "pihome/sensors/camera.h"
 
 #include <ctime>
 #include <fstream>

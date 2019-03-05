@@ -17,11 +17,11 @@
 #include <stdint.h>
 #include <vector>
 
-#include "sensors/dht11.h"
-#include "sensors/mq135.h"
-#include "sensors/pir.h"
-#include "sensors/ipcamera.h"
-#include "sensors/raspicamera.h"
+#include "pihome/sensors/dht11.h"
+#include "pihome/sensors/mq135.h"
+#include "pihome/sensors/pir.h"
+#include "pihome/sensors/ipcamera.h"
+#include "pihome/sensors/raspicamera.h"
 
 class PIHome {
 public:

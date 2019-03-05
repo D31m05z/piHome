@@ -1,4 +1,4 @@
-#include "raspicamera.h"
+#include "pihome/sensors/raspicamera.h"
 #include <raspicam/raspicam.h>
 
 #include <ctime>
