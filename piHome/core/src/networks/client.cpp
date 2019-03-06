@@ -35,7 +35,7 @@ int Client::createSocket()
     }
 
     memset(&server_, 0, sizeof(server_));
-    server_.sin_addr.s_addr = inet_addr("10.1.12.75");
+    server_.sin_addr.s_addr = inet_addr("192.168.0.21");
     server_.sin_family = AF_INET;
     server_.sin_port = htons(8889);
 

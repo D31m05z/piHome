@@ -17,7 +17,7 @@ namespace pihome {
 
             int waitIncomingConnection();
 
-            int sendImage(int socket);
+            int sendImage(int socket, const char* fileName);
 
         private:
             int socket_desc_;

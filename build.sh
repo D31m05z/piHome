@@ -36,3 +36,4 @@ build piHome/core
 
 # build app
 build piHome/app
+build piHome/zero

@@ -69,21 +69,16 @@ int Server::waitIncomingConnection()
         return 1;
     }
 
-    // for test
-    if(sendImage(new_socket_) !=0) {
-        return 1;
-    }
-
-    return 0;
+    return new_socket_;
 }
 
-int Server::sendImage(int socket) {
+int Server::sendImage(int socket, const char* fileName) {
     FILE *picture;
     int size, read_size, stat, packet_index;
     char send_buffer[10240], read_buffer[256];
     packet_index = 1;
 
-    picture = fopen("capture.jpeg", "r");
+    picture = fopen(fileName, "r");
     printf("Getting Picture Size\n");
 
     if (picture == NULL) {
@@ -133,15 +128,3 @@ int Server::sendImage(int socket) {
 
     return 0;
 }
-
-#if BUILD_SERVER_APP
-int main() {
-    Server server;
-    if(server.createSocket() != 0) {
-        return 1;
-    }
-    server.waitIncomingConnection();
-
-    return 0;
-}
-#endif
