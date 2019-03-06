@@ -5,6 +5,9 @@
 #include <iostream>
 #include <unistd.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 using namespace pihome::sensors;
 
 IPCamera::IPCamera(const std::string& name, size_t width, size_t height)
@@ -23,11 +26,22 @@ IPCamera::~IPCamera()
 void IPCamera::update()
 {
     //capture
-    client_.receiveImage(socket_);
+    std::vector<unsigned char> data;
+    client_.receiveImage(socket_, data);
 
     std::lock_guard<std::mutex> guard(mutex_);
 
-    //extract the image in rgb format
-    // TODO: copy image image_.data.data(),  //get camera image
-}
+    char* img;
+    int w, h, c;
 
+    //STBIDEF stbi_uc *stbi_load_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp, int req_comp)
+    img = (char*)stbi_load_from_memory(data.data(), data.size(), &w, &h, &c, 3);
+
+    printf("w=%d h=%d c=%d\n", w, h, c);
+
+    // TODO : eliminate the memcpy
+    image_.width = w;
+    image_.height = h;
+    image_.data.resize(w*h*c);
+    memcpy(image_.data.data(), img, image_.data.size());
+}

@@ -126,5 +126,7 @@ int Server::sendImage(int socket, const char* fileName) {
         bzero(send_buffer, sizeof(send_buffer));
     }
 
+    fclose(picture);
+
     return 0;
 }

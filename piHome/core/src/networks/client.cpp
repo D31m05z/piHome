@@ -54,12 +54,11 @@ int Client::createSocket()
 
 //This function is to be used once we have confirmed that an image is to be sent
 //It should read and output an image file
-int Client::receiveImage(int socket)
+int Client::receiveImage(int socket, std::vector<unsigned char>& data)
 {
     int buffersize = 0, recv_size = 0, size = 0, read_size, write_size, packet_index = 1, stat;
 
     char imagearray[10241], verify = '1';
-    FILE *image;
 
 //Find the size of the image
     do {
@@ -81,12 +80,6 @@ int Client::receiveImage(int socket)
     printf("Reply sent\n");
     printf(" \n");
 
-    image = fopen("capture2.jpeg", "w");
-
-    if (image == NULL) {
-        printf("Error has occurred. Image file could not be opened\n");
-        return -1;
-    }
 
 //Loop while we have not received the entire file yet
 
@@ -119,15 +112,15 @@ int Client::receiveImage(int socket)
             printf("Packet number received: %i\n", packet_index);
             printf("Packet size: %i\n", read_size);
 
-
             //Write the currently read data into our image file
-            write_size = fwrite(imagearray, 1, read_size, image);
+            for(int i=0; i < read_size; i++) {
+                data.push_back(imagearray[i]);
+            }
             printf("Written image size: %i\n", write_size);
 
             if (read_size != write_size) {
                 printf("error in read write\n");
             }
-
 
             //Increment the total number of bytes read
             recv_size += read_size;
@@ -138,9 +131,6 @@ int Client::receiveImage(int socket)
         }
 
     }
-
-
-    fclose(image);
     printf("Image successfully Received!\n");
     return 1;
 }

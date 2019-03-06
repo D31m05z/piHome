@@ -1,6 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include <string.h>
+#include <vector>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
@@ -15,7 +16,7 @@ namespace pihome {
 
             int createSocket();
 
-            int receiveImage(int socket);
+            int receiveImage(int socket, std::vector<unsigned char>& data);
 
         private:
             int socket_desc_;
