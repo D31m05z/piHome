@@ -1,0 +1,9 @@
+include(CMakeFindDependencyMacro)
+
+find_dependency(raspicam)
+
+if (@wiringPi_FOUND@)
+    find_dependency(wiringPi)
+endif()
+
+include(${CMAKE_CURRENT_LIST_DIR}/core-targets.cmake)

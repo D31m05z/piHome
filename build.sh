@@ -31,5 +31,8 @@ build 3rdparty/imgui
 build 3rdparty/raspicam
 #build 3rdparty/wiringpi
 
-# build main project
-build piHome
+# build core project
+build piHome/core
+
+# build app
+build piHome/app

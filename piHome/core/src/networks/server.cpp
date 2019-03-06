@@ -134,7 +134,7 @@ int Server::sendImage(int socket) {
     return 0;
 }
 
-#if 0
+#if BUILD_SERVER_APP
 int main() {
     Server server;
     if(server.createSocket() != 0) {
