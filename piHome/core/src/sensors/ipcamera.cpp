@@ -10,13 +10,13 @@
 
 using namespace pihome::sensors;
 
-IPCamera::IPCamera(const std::string& name, size_t width, size_t height)
+IPCamera::IPCamera(const std::string& name, const char* address, int port, size_t width, size_t height)
     : Sensor(name)
     , Camera(width, height, width * height * 3) // TODO: w*h*c channel = 3 (RGB)
     , socket_(-1)
 {
     // connect to server'
-    socket_ = client_.createSocket();
+    socket_ = client_.createSocket(address, port);
 }
 
 IPCamera::~IPCamera()

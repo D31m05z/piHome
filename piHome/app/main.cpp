@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv)
 {
-    PIHome piHome;
+    PIHome piHome(argc, argv);
     while(piHome.isRunning()) {
         //piHome.update();
         piHome.draw();

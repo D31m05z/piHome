@@ -14,7 +14,7 @@ namespace pihome {
 
             ~Client();
 
-            int createSocket();
+            int createSocket(const char* address, int port);
 
             int receiveImage(int socket, std::vector<unsigned char>& data);
 

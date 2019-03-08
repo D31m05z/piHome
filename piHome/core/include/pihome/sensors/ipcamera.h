@@ -13,7 +13,7 @@ namespace pihome {
         class IPCamera : public Sensor, public Camera {
         public:
             // std::string name
-            IPCamera(const std::string &name, size_t width, size_t height);
+            IPCamera(const std::string &name, const char* address, int port, size_t width, size_t height);
 
             ~IPCamera();
 

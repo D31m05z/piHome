@@ -10,7 +10,7 @@ static void error_callback(int error, const char* description)
     fprintf(stderr, "Error %d: %s\n", error, description);
 }
 
-PIHome::PIHome()
+PIHome::PIHome(int argc, char** argv)
     : exiting_(false)
     , warnStep_(0)
 {
@@ -86,7 +86,11 @@ PIHome::PIHome()
     sensors_.push_back(new PIRSensor("Raspberry Pi PIR Motion decetor sensor", 20));
 #endif
     //sensors_.push_back(new RaspiCamera("Raspberry Pi Camera sensor", 1280, 720));
-    sensors_.push_back(new IPCamera("Rasberry Pi IP Camera sensor", 1280, 720));
+
+    // TODO: argument parser
+    if(argc>1) {
+      sensors_.push_back(new IPCamera("Rasberry Pi IP Camera sensor", argv[1], 8888, 1280, 720));
+    }
 
     printf( "SENSORS: \n" );
     for(int i=0; i < sensors_.size(); i++) {

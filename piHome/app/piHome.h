@@ -25,7 +25,7 @@
 
 class PIHome {
 public:
-    PIHome();
+    PIHome(int argc, char** argv);
     ~PIHome();
 
     void update();
