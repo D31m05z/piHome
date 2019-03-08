@@ -1,5 +1,6 @@
 
 #include "pihome/networks/server.h"
+#include "pihome/sensors/raspicamera.h"
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,6 +14,8 @@ void SIGINT_signal(int s){
 int main(int argc, char** argv)
 {
     signal(SIGINT, SIGINT_signal);
+
+    pihome::sensors::RaspiCamera camera("IP Camera", 1280, 720);
 
     pihome::networks::Server server;
 
@@ -28,9 +31,17 @@ int main(int argc, char** argv)
 
     while(true) {
         // for test
-        if(server.sendImage(client_socket, "image.jpg") !=0) {
+        // if(server.sendImage(client_socket, "image.jpg") !=0) {
+        //     return 1;
+        // }
+
+        camera.update();
+        const pihome::sensors::Image& image = camera.getImage();
+
+        if(server.sendImage(client_socket, image) !=0) {
             return 1;
         }
+
     }
 
     return 0;

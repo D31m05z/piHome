@@ -1,4 +1,5 @@
 #include "pihome/networks/server.h"
+#include "pihome/sensors/camera.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -11,6 +12,7 @@
 
 using namespace std;
 using namespace pihome::networks;
+using namespace pihome::sensors;
 
 Server::Server()
     : socket_desc_(-1)
@@ -127,6 +129,60 @@ int Server::sendImage(int socket, const char* fileName) {
     }
 
     fclose(picture);
+
+    return 0;
+}
+
+int Server::sendImage(int socket, const Image& image)
+{
+    int size=0, read_size=0, total=0, stat=0, packet_index=1;
+    char send_buffer[10240], read_buffer[256];
+
+    size = image.data.size();
+    printf("Total Picture size: %i\n", size);
+
+    //Send Picture Size
+    printf("Sending Picture Size\n");
+    write(socket, (void *) &size, sizeof(int));
+
+    //Send Picture as Byte Array
+    printf("Sending Picture as Byte Array\n");
+
+    do { //Read while we get errors that are due to signals.
+        stat = read(socket, &read_buffer, 255);
+        printf("Bytes read: %i\n", stat);
+    } while (stat < 0);
+
+    printf("Received data in socket\n");
+    printf("Socket data: %s\n", read_buffer);
+
+    while (total < size) {
+        //while(packet_index = 1){
+        //Read from the file into our send buffer
+        read_size = std::min(image.data.size() - total, sizeof(send_buffer));
+
+        for(int i = 0; i < read_size; i++ ) {
+            send_buffer[i] = image.data[total + i];
+        }
+        total += read_size;
+        //read_size = fread(send_buffer, 1, sizeof(send_buffer) - 1, picture);
+
+        //Send data through our socket
+        do {
+            stat = write(socket, send_buffer, read_size);
+        } while (stat < 0);
+
+        printf("Packet Number: %i\n", packet_index);
+        printf("Packet Size Sent: %i\n", read_size);
+        printf("Total Size: %i\n", total);
+        printf(" \n");
+        printf(" \n");
+
+        packet_index++;
+
+        //Zero out our send buffer
+        bzero(send_buffer, sizeof(send_buffer));
+    }
 
     return 0;
 }

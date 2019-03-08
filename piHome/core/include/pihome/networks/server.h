@@ -5,6 +5,11 @@
 #include <arpa/inet.h>
 
 namespace pihome {
+
+    namespace sensors {
+      struct Image;
+    }
+
     namespace networks {
 
         class Server {
@@ -18,6 +23,8 @@ namespace pihome {
             int waitIncomingConnection();
 
             int sendImage(int socket, const char* fileName);
+
+            int sendImage(int socket, const sensors::Image& image);
 
         private:
             int socket_desc_;
