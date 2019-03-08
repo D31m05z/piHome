@@ -31,17 +31,22 @@ void IPCamera::update()
 
     std::lock_guard<std::mutex> guard(mutex_);
 
-    char* img;
-    int w, h, c;
+    // TODO: separate raw image and jpeg image recev
+    //char* img;
+    //int w, h, c;
 
     //STBIDEF stbi_uc *stbi_load_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp, int req_comp)
-    img = (char*)stbi_load_from_memory(data.data(), data.size(), &w, &h, &c, 3);
+    //img = (char*)stbi_load_from_memory(data.data(), data.size(), &w, &h, &c, 3);
 
-    printf("w=%d h=%d c=%d\n", w, h, c);
+    //printf("w=%d h=%d c=%d\n", w, h, c);
 
     // TODO : eliminate the memcpy
-    image_.width = w;
-    image_.height = h;
-    image_.data.resize(w*h*c);
-    memcpy(image_.data.data(), img, image_.data.size());
+    //image_.width = w;
+    //image_.height = h;
+    //image_.data.resize(w*h*c);
+    //memcpy(image_.data.data(), img, image_.data.size());
+
+    image_.width = 1280;
+    image_.height= 720;
+    image_.data = data;
 }
