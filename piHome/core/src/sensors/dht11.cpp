@@ -1,4 +1,4 @@
-#include "dht11.h"
+#include "pihome/sensors/dht11.h"
 
 #include <wiringPi.h>
 #include <stdio.h>
@@ -34,6 +34,10 @@ void DHT11Sensor::update()
     digitalWrite( DHT_PIN_, LOW );
     delay( 18 );
 
+    /* then pull it up for 40 microseconds */
+    digitalWrite( DHT_PIN_, HIGH );
+    delayMicroseconds( 40 );
+
     /* prepare to read the pin */
     pinMode( DHT_PIN_, INPUT );
 
@@ -56,7 +60,7 @@ void DHT11Sensor::update()
         if ( (i >= 4) && (i % 2 == 0) ) {
             /* shove each bit into the storage bytes */
             data_[j / 8] <<= 1;
-            if ( counter > 16 ){
+            if ( counter > 30 ){ // 16
                 data_[j / 8] |= 1;
             }
             j++;
@@ -67,8 +71,9 @@ void DHT11Sensor::update()
      * check we read 40 bits (8bit x 5 ) + verify checksum in the last byte
      * print it out if data is good
      */
-    if ( (j >= 40) &&
-         (data_[4] == ( (data_[0] + data_[1] + data_[2] + data_[3]) & 0xFF) ) ) {
+   if ( (j >= 40) &&
+        (data_[4]==((data_[0] + data_[1] + data_[2] + data_[3]) & 0xFF) ) ) {
+        
         float h = (float)((data_[0] << 8) + data_[1]) / 10;
         if ( h > 100 ) {
             h = data_[0];    // for DHT11
@@ -82,7 +87,18 @@ void DHT11Sensor::update()
         }
         float f = c * 1.8f + 32;
         printf( "Humidity = %.1f %% Temperature = %.1f *C (%.1f *F)\n", h, c, f );
+
+	std::lock_guard<std::mutex> guard(mutex_);
+	dhtData_.humidity = h;
+	dhtData_.temperature = c;
+	dhtData_.temperature_f = f;
     } else  {
-        printf( "Data not good, skip\n" );
+        //printf( "Data not good, skip\n" );
     }
+}
+
+DHTData DHT11Sensor::getData()
+{
+    std::lock_guard<std::mutex> guard(mutex_);
+    return dhtData_;
 }

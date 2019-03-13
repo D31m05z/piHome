@@ -1,4 +1,4 @@
-#include "pir.h"
+#include "pihome/sensors/pir.h"
 
 #include <unistd.h>
 #include <stdlib.h>

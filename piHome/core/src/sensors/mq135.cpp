@@ -1,4 +1,4 @@
-#include "mq135.h"
+#include "pihome/sensors/mq135.h"
 #include <wiringPi.h>
 
 using namespace pihome::sensors;

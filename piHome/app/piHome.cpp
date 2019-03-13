@@ -18,7 +18,7 @@ PIHome::PIHome(int argc, char** argv)
 
 #if HAVE_WIRING_PI
     // initialize wiringPiSetupGpio
-    if ( wiringPiSetupGpio() == -1 ) {
+    if ( wiringPiSetup() == -1 ) {
         throw std::runtime_error("[E] wiringPiSetupGpio failed");
     }
 #endif
@@ -81,9 +81,9 @@ PIHome::PIHome(int argc, char** argv)
 
     // initialize sensors
 #if HAVE_WIRING_PI
-    //sensors_.push_back(new DHT11Sensor("Raspberry Pi DHT11/DHT22 temperature/humidity", 4, 85));
-    sensors_.push_back(new MQ135Sensor("Raspberry Pi MQ-135 Gas sensor", 19));
-    sensors_.push_back(new PIRSensor("Raspberry Pi PIR Motion decetor sensor", 20));
+    sensors_.push_back(new DHT11Sensor("Raspberry Pi DHT11/DHT22 temperature/humidity", 15, 85));
+    //sensors_.push_back(new MQ135Sensor("Raspberry Pi MQ-135 Gas sensor", 19));
+    //sensors_.push_back(new PIRSensor("Raspberry Pi PIR Motion decetor sensor", 20));
 #endif
     //sensors_.push_back(new RaspiCamera("Raspberry Pi Camera sensor", 1280, 720));
 
@@ -215,6 +215,12 @@ void PIHome::draw()
                 ImGui::Text("OK");
             }
         }
+
+	DHT11Sensor* dht11 = dynamic_cast<DHT11Sensor*>(sensors_[i]);
+        if(dht11 != nullptr) {
+            DHTData data = dht11->getData();
+            ImGui::Text("Humidity = %.1f %% Temperature = %.1f *C (%.1f *F)", data.humidity, data.temperature, data.temperature_f);
+	}
 #endif
         ImGui::End();
 

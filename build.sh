@@ -25,10 +25,10 @@ function build {
 
 # build dependencies
 #build 3rdparty/glshim
-build 3rdparty/glm
-build 3rdparty/glfw "-DGLFW_USE_EGL=true -DGLFW_CLIENT_LIBRARY=glesv2"
-build 3rdparty/imgui
-build 3rdparty/raspicam
+#build 3rdparty/glm
+#build 3rdparty/glfw "-DGLFW_USE_EGL=true -DGLFW_CLIENT_LIBRARY=glesv2"
+#build 3rdparty/imgui
+#build 3rdparty/raspicam
 #build 3rdparty/wiringpi
 
 # build core project

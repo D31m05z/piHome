@@ -40,8 +40,10 @@ target_include_directories(${PROJECT_NAME}
 # TODO: raspicam use target install
 set(libs ${raspicam_LIBS})
 
+set(wiringPi_FOUND 1)
+
 if(wiringPi_FOUND)
-    target_sources(${PROJECT_NAME}
+	target_sources(${PROJECT_NAME} PRIVATE
         src/sensors/dht11.cpp
         src/sensors/mq135.cpp
         src/sensors/pir.cpp
