@@ -1,6 +1,6 @@
 [submodule "3rdparty/glfw"]
 	path = 3rdparty/glfw
-	url = https://github.com/glfw/glfw.git
+	url = https://github.com/shaxbee/glfw.git
 [submodule "3rdparty/glm"]
 	path = 3rdparty/glm
 	url = git@github.com:D31m05z/glm.git
