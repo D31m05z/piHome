@@ -37,10 +37,9 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC $<INSTALL_INTERFACE:include>
 )
 
-# TODO: raspicam use target install
-set(libs ${raspicam_LIBS})
+set(libs ::raspicam)
 
-set(wiringPi_FOUND 1)
+set(wiringPi_FOUND 0)
 
 if(wiringPi_FOUND)
 	target_sources(${PROJECT_NAME} PRIVATE

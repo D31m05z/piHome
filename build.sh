@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 
-: ${CMAKE_PREFIX_PATH:="$PWD/3rdparty/install"}
+: ${CMAKE_PREFIX_PATH:="$PWD/install"}
 : ${PARALLEL:="8"}
 
 if [[ "$USE_CROSS_COMPILE" == true ]];

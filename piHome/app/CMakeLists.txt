@@ -16,6 +16,6 @@ add_executable(${PROJECT_NAME}
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE -DGLFW_INCLUDE_ES2)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ::core glfw3 ::imgui)
+target_link_libraries(${PROJECT_NAME} PRIVATE ::core glfw ::imgui)
 
 install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME} DESTINATION lib)
